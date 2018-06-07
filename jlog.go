@@ -5,12 +5,15 @@ import (
     "fmt"
     "time"
     "encoding/json"
+    "log"
 
 )
 
 const (
 
 	INFO = "info"
+	FATAL = "fatal"
+	WARN = "warning"
 	ERROR = "error"
 	INIT = "Init"
 
@@ -29,7 +32,7 @@ type logData struct {
 
 }
 
-func Log(stdOut bool, log bool, src string, method string, msgType string, msg string, data map[string]interface{}) {
+func Log(stdOut bool, logOut bool, src string, method string, msgType string, msg string, data map[string]interface{}) {
 
 	var lData logData
 
@@ -44,13 +47,19 @@ func Log(stdOut bool, log bool, src string, method string, msgType string, msg s
 	// marshal to json
 	data_json, err := json.Marshal(lData)
 
+	data_json_s := string(data_json)
+
 	// handle errors
 	if err != nil {
 		fmt.Println(err)
 	}
 
 	if stdOut {
-		fmt.Println(string(data_json))
+		fmt.Println(data_json_s)
+	}
+
+	if logOut {
+		log.Println(data_json_s)
 	}
     
 }
